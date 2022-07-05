@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# my ignore
+*.xlsx
+*.DAT
+*.INP
+*.MET
+*.SECT
+test/
+OutputLogs.txt
