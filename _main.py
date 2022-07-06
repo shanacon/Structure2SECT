@@ -22,7 +22,7 @@ class COLUMN :
         self.steel1 = steel1
         self.steel2 = steel2
 class BEAM :
-    def __init__(self, name, BC, HC, No, S, SM, whichFloor):
+    def __init__(self, name, BC, HC, No, UNo, DNo, S, SM, whichFloor, UU, UB, BU, BB):
         self.name = name
         self.RCMaterial = name + '_CONC'
         if whichFloor[0] == 'R':
@@ -42,9 +42,12 @@ class BEAM :
         self.BC = BC  
         self.HC = HC  
         self.No = No  
+        self.UNo = UNo  
+        self.DNo = DNo 
         self.S = S
         self.SM = SM
         self.whichFloor = whichFloor
+        self.AUB = [UU, UB, BU, BB]
 def IsInt(s):
     try: 
         int(s)
@@ -174,3 +177,9 @@ def defaultList(InList, phase) :
         InList.append('$ End DUF B Section Definitions\n\n')
         InList.append('$ Steels Location\n')
         InList.append('$\tName\t\tMaterial\t\tNo. X Y\n')
+    elif phase == 2:
+        InList.append('\n$ End Steels Location\n\n')
+        InList.append('$ H Steel Datas And Locations\n')
+        InList.append('$ Name	Material	Width	Height	tw	tu	tb	X	Y	Angle\n')
+        InList.append(' 			cm	cm	cm	cm	cm\n\n')
+        InList.append('$ End H Steel Datas And Locations\n')

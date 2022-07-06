@@ -147,8 +147,21 @@ while CaseBeam < LineLen:
     SList = []
     SMList = []
     WFList = []
+    #
+    UUList = []
+    UBList = []
+    BUList = []
+    BBList = []
+    #
     tmp = lines[0].split('*')
+    tmp2 = lines[2].replace('*', ' ').split()
+    tmp3 = lines[3].replace('#', ' ').split()
+    tmp4 = lines[4].replace('#', ' ').split()
+    tmp5 = lines[5].replace('*', ' ').split()
     tmp6 = lines[6].split()
+    UNo = tmp3[0]
+    DNo = tmp4[0]
+    UDcount = 1
     STIRcount = 2
     for i in range(1, 1 + Casenum) :
         tmp[i] = tmp[i].replace('(', ' ')
@@ -163,10 +176,25 @@ while CaseBeam < LineLen:
         SNoList.append('#' + tmp6[STIRcount].split('#')[-1])
         SList.append(str(max(float(tmp6[STIRcount + 1]),float(tmp6[STIRcount + 3]))))
         SMList.append(tmp6[STIRcount + 2])
+        # TOP
+        if int(tmp2[UDcount]) + int(tmp3[UDcount]) < int(tmp2[UDcount + 2]) + int(tmp3[UDcount + 2]) :
+            UUList.append(tmp2[UDcount])
+            UBList.append(tmp3[UDcount])
+        else :
+            UUList.append(tmp2[UDcount + 2])
+            UBList.append(tmp3[UDcount + 2])
+        # BOT
+        if int(tmp4[UDcount]) + int(tmp5[UDcount]) < int(tmp4[UDcount + 2]) + int(tmp5[UDcount + 2]) :
+            BUList.append(tmp4[UDcount])
+            BBList.append(tmp5[UDcount])
+        else :
+            BUList.append(tmp4[UDcount + 2])
+            BBList.append(tmp5[UDcount + 2])
+        UDcount = UDcount + 3
         STIRcount = STIRcount + 4
     for i in range(Casenum) :
         if nameList[i].find('P') == -1:
-            ALLBEAM.append(BEAM(nameList[i], BCList[i], HCList[i], SNoList[i], SList[i], SMList[i], WFList[i]))
+            ALLBEAM.append(BEAM(nameList[i], BCList[i], HCList[i], SNoList[i], UNo, DNo, SList[i], SMList[i], WFList[i], UUList[i], UBList[i], BUList[i], BBList[i]))
     CaseBeam = CaseBeam + 8
 ALLCOLUMN.sort(key=compare)
 ALLBEAM.sort(key=compare)
@@ -214,6 +242,35 @@ for column in ALLCOLUMN :
             linex = linex + '2'
         Y = float("{:.2f}".format(float(YB - float(i * space))))
         OutputDataY.append(linex + f'({X1},{Y}-{X2},{Y})\n')
+for beam in ALLBEAM :
+    BasicLine = f'\t{beam.name}\t\t{beam.RCMaterial}' + '_fy\t\t#'
+    UNo = int(beam.UNo)
+    DNo = int(beam.DNo)
+    No = int(beam.No[1:])
+    for i in range(4) :
+        if beam.AUB[i] != '0' :
+            if i <= 1 :
+                line = BasicLine + beam.UNo + '*' + beam.AUB[i]
+                space = 3 + float(NodDic[UNo] / 2)
+                space = float("{:.2f}".format(float(space)))
+                X1 = float(5.0 + NodDic[No] + float(NodDic[UNo] / 2))
+                X1 = float("{:.2f}".format(float(X1)))
+                X2 = float(beam.BC) - X1
+                Y = X1 + space * i
+            else :
+                line = BasicLine + beam.DNo + '*' + beam.AUB[i]
+                space = 3 + float(NodDic[UNo] / 2)
+                space = float("{:.2f}".format(float(space)))
+                X1 = float(5.0 + NodDic[No] + float(NodDic[DNo] / 2))
+                X1 = float("{:.2f}".format(float(X1)))
+                X2 = float(beam.BC) - X1
+                Y = float(beam.HC) - X1 -space * float(i-3)
+            Y = float("{:.2f}".format(float(Y)))
+            OutputDataX.append(f'{line}({str(X1)},{str(Y)}-{str(X2)},{str(Y)})\n')
+            OutputDataY.append(f'{line}({str(X1)},{str(Y)}-{str(X2)},{str(Y)})\n')
+##
+defaultList(OutputDataX, 2)
+defaultList(OutputDataY, 2)
 outputX = open(filename + '+X.SECT', mode = 'w')
 for line in OutputDataX :
     outputX.write(line)
