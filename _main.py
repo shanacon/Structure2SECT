@@ -1,5 +1,5 @@
 class COLUMN :
-    def __init__(self, name, BC, HC, No1, No, Numx, Numy, S, SM, whichFloor):
+    def __init__(self, name, BC, HC, No1, No, Numx, Numy, S, SM, whichFloor, steel1, steel2):
         self.name = name
         self.RCMaterial = name + '_CONC'
         if whichFloor[0] == 'R':
@@ -19,7 +19,8 @@ class COLUMN :
         self.Numy = Numy
         self.S = S
         self.SM = SM
-        self.whichFloor = whichFloor
+        self.steel1 = steel1
+        self.steel2 = steel2
 class BEAM :
     def __init__(self, name, BC, HC, No, S, SM, whichFloor):
         self.name = name
@@ -52,6 +53,19 @@ def IsInt(s):
         return False
 def compare(case):
     return -case.FloorPtr
+NodDic = {3 : 0.953, 
+          4 : 1.27, 
+          5 : 1.59, 
+          6 : 1.91, 
+          7 : 2.22, 
+          8 : 2.54, 
+          9 : 2.87, 
+          10 : 3.22, 
+          11 : 3.58,
+          12 : 3.94,
+          14 : 4.30,
+          16 : 5.02,
+          18 : 5.73}
 def defaultList(InList, phase) :
     if phase == 0 :
         InList.append('$Unit\n')

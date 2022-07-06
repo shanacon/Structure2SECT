@@ -81,11 +81,13 @@ while CaseCXX < LineLen:
         Numy = int(lines[3][3]) + 2
         S = int(lines[5][1])
         SM = int(lines[5][2])
+        steel1 = int(lines[3][0])
+        steel2 = int(lines[4][0])
     except Exception as e:
         WriteEx()
         ExceptionExit('CXX: line 4 or 5 Out of range. Doing No Numxy S.')
     whichFloor = floor
-    ALLCOLUMN.append(COLUMN(name, BC, HC, No1, No, Numx, Numy, S, SM, whichFloor))
+    ALLCOLUMN.append(COLUMN(name, BC, HC, No1, No, Numx, Numy, S, SM, whichFloor, steel1, steel2))
     CaseCXX = CaseCXX + 6
     ## progress bar
     # if float(CaseCXX / LineLen) * 10.0 > Progress:
@@ -174,8 +176,44 @@ for column in ALLCOLUMN :
 for beam in ALLBEAM:
     OutputDataX.append(f'\t{beam.name}\t{beam.RCMaterial}\t{beam.BC}\t{beam.HC}\t5\t{beam.No}\t{beam.S}\t{beam.SM}\t\t0\n')
     OutputDataY.append(f'\t{beam.name}\t{beam.RCMaterial}\t{beam.HC}\t{beam.BC}\t5\t{beam.No}\t{beam.S}\t{beam.SM}\t\t0\n')
+###
 defaultList(OutputDataX, 1)
 defaultList(OutputDataY, 1)
+###
+for column in ALLCOLUMN :
+    # column = COLUMN(column)
+    No = int(column.No[1:])
+    No1 = int(column.No1[1:])
+    BasicLine = f'\t{column.name}\t\t{column.RCMaterial}' + '_fy\t\t' + f'{column.No1}*'
+    X1 = float(5.0 + NodDic[No] + float(NodDic[No1] / 2))
+    X1 = float("{:.2f}".format(float(X1)))
+    X2 = float(column.HC) - X1
+    YB = X1
+    space = float((column.BC - 10.0 - 2 * NodDic[No] - NodDic[No1]) / (column.steel2 - 1))
+    space = float("{:.2f}".format(float(space)))
+    for i in range(column.steel2) :
+        linex = BasicLine
+        if i == 0 or i ==  column.steel2 - 1 :
+            linex = linex + str(column.steel1)
+        else :
+            linex = linex + '2'
+        Y = float("{:.2f}".format(float(YB - float(i * space))))
+        OutputDataX.append(linex + f'({X1},{Y}-{X2},{Y})\n')
+    ##
+    X1 = float(5.0 + NodDic[No] + float(NodDic[No1] / 2))
+    X1 = float("{:.2f}".format(float(X1)))
+    X2 = float(column.HC) - X1
+    YB = X1
+    space = float((column.BC - 10.0 - 2 * NodDic[No] - NodDic[No1]) / (column.steel1 - 1))
+    space = float("{:.2f}".format(float(space)))
+    for i in range(column.steel1) :
+        linex = BasicLine
+        if i == 0 or i ==  column.steel1 - 1 :
+            linex = linex + str(column.steel2)
+        else :
+            linex = linex + '2'
+        Y = float("{:.2f}".format(float(YB - float(i * space))))
+        OutputDataY.append(linex + f'({X1},{Y}-{X2},{Y})\n')
 outputX = open(filename + '+X.SECT', mode = 'w')
 for line in OutputDataX :
     outputX.write(line)
