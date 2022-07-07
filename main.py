@@ -193,8 +193,8 @@ while CaseBeam < LineLen:
         UDcount = UDcount + 3
         STIRcount = STIRcount + 4
     for i in range(Casenum) :
-        if nameList[i].find('P') == -1:
-            ALLBEAM.append(BEAM(nameList[i], BCList[i], HCList[i], SNoList[i], UNo, DNo, SList[i], SMList[i], WFList[i], UUList[i], UBList[i], BUList[i], BBList[i]))
+        if nameList[i].find('P') == -1 and (BCList[i] != '0' or HCList[i] != '0'):
+            ALLBEAM.append(BEAM(nameList[i], float(BCList[i]), float(HCList[i]), SNoList[i], UNo, DNo, SList[i], SMList[i], WFList[i], UUList[i], UBList[i], BUList[i], BBList[i]))
     CaseBeam = CaseBeam + 8
 ALLCOLUMN.sort(key=compare)
 ALLBEAM.sort(key=compare)
