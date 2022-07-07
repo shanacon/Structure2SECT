@@ -10,7 +10,6 @@ class COLUMN :
             self.FloorPtr = int(whichFloor)
         else :
             self.FloorPtr = -1000
-        self.type = type  
         self.BC = BC  
         self.HC = HC  
         self.No1 = No1  
