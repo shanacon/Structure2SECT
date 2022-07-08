@@ -91,7 +91,8 @@ while CaseCXX < LineLen:
         WriteEx()
         ExceptionExit('CXX: line 4 or 5 Out of range. Doing No Numxy S.')
     whichFloor = floor
-    ALLCOLUMN.append(COLUMN(name, BC, HC, No1, No, Numx, Numy, S, SM, whichFloor, steel1, steel2))
+    if whichFloor[0] >= '0' and whichFloor[0] <= '9' or whichFloor == 'R1':
+        ALLCOLUMN.append(COLUMN(name, BC, HC, No1, No, Numx, Numy, S, SM, whichFloor, steel1, steel2))
     CaseCXX = CaseCXX + 6
     # progress bar
     if float(CaseCXX / LineLen) * 10.0 > Progress:
@@ -213,7 +214,8 @@ while CaseBeam < LineLen:
         STIRcount = STIRcount + 4
     for i in range(Casenum) :
         if nameList[i].find('P') == -1 and (BCList[i] != '0' or HCList[i] != '0'):
-            ALLBEAM.append(BEAM(nameList[i], float(BCList[i]), float(HCList[i]), SNoList[i], UNo, DNo, SList[i], SMList[i], WFList[i], UUList[i], UBList[i], BUList[i], BBList[i]))
+            if WFList[i][0] >= '0' and WFList[i][0] <= '9' or WFList[i] == 'R1':
+                ALLBEAM.append(BEAM(nameList[i], float(BCList[i]), float(HCList[i]), SNoList[i], UNo, DNo, SList[i], SMList[i], WFList[i], UUList[i], UBList[i], BUList[i], BBList[i]))
     CaseBeam = CaseBeam + 8
     # progress bar
     if float(CaseBeam / LineLen) * 10.0 > Progress:
