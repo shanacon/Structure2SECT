@@ -104,7 +104,7 @@ while CaseCXX < LineLen:
         for i in range(10 - Progress):
             print(' ', end = '')
         print(']', end = '')
-        time.sleep(0.05)
+        time.sleep(0.02)
     # progress bar
 print('\nreading data from A6B103C...')
 #load beam data
@@ -227,7 +227,7 @@ while CaseBeam < LineLen:
         for i in range(10 - Progress):
             print(' ', end = '')
         print(']', end = '')
-        time.sleep(0.05)
+        time.sleep(0.02)
     # progress bar
 ALLCOLUMN.sort(key=compare)
 ALLBEAM.sort(key=compare)
@@ -297,7 +297,7 @@ for column in ALLCOLUMN :
         for i in range(10 - Progress):
             print(' ', end = '')
         print(']', end = '')
-        time.sleep(0.05)
+        time.sleep(0.02)
     # progress bar
 ###
 print('\ngenerating steel data of beam...')
@@ -349,7 +349,7 @@ for beam in ALLBEAM :
         for i in range(10 - Progress):
             print(' ', end = '')
         print(']', end = '')
-        time.sleep(0.05)
+        time.sleep(0.02)
     # progress bar
 ##
 defaultList(OutputDataX, 2)
